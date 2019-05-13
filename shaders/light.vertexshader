@@ -1,0 +1,24 @@
+#version 410
+
+uniform mat4 WVP;
+uniform mat4 model_to_world;
+uniform mat4 normal_to_world;
+
+uniform vec3 light_pos;
+uniform vec3 camera_pos;
+
+layout (location = 0) in vec3 v_pos;
+layout (location = 1) in vec3 v_normal;
+
+out vec3 l_in_world;
+out vec3 n_in_world;
+
+void main()
+{
+  vec3 world_pos = (model_to_world*vec4(v_pos,1.0)).xyz;
+  n_in_world = (normal_to_world*vec4(v_normal,0.0)).xyz;
+  l_in_world = light_pos - world_pos;
+
+  //chaned to use v_pos instead of world_pos, why does this work?
+  gl_Position = WVP*vec4(v_pos,1.0);
+}
